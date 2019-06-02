@@ -50,8 +50,7 @@ It is possible to attach java agent to an already running process
 
 28646 is the pid of the application. You can know the pid using jconsole ( or with ps command ). 
 
-jolokia endpoint examples
-
+#### jolokia endpoint examples
 http://localhost:8778/jolokia/read/java.lang:type=Runtime
 http://localhost:8778/jolokia/read/java.lang:type=Memory
 http://localhost:8778/jolokia/read/java.lang:type=Memory/HeapMemoryUsage
@@ -88,4 +87,5 @@ The below table gives the list of mbean and important metrics being collected in
 This module collects metrics from Jolokia agents running on a target JMX server or dedicated proxy server. The default metricset is jmx. To collect metrics, Metricbeat communicates with a Jolokia HTTP/REST endpoint that exposes the JMX metrics over HTTP/REST/JSON.
 
 Using jolokia module, we can read hundreds of attributes exposed by java run time. It can also be used to read custom application metrics. The module has to be configured to read specific metrics. All metrics from a single mapping will be POSTed to the defined host/port and sent to Elastic as a single event. To make it possible to differentiate between metrics from multiple similar applications running on the same host, you should configure multiple modules. When wildcards are used, an event is sent to Elastic for each matching MBean, and an mbean field is added to the event.
+
 Refer to **metricbeat.yml** in this repository for metric beat configuration.
