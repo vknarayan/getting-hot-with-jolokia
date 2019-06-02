@@ -1,0 +1,202 @@
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["192.168.1.28:9200", "192.168.1.29:9200", "192.168.1.30:9200"]
+  index: "metrics-%{[beat.version]}-%{+yyyy.MM.dd}"
+  # Optional protocol and basic auth credentials.
+  username: "username"
+  password: "password"
+
+metricbeat.modules:
+#------------------------------- Jolokia Module ------------------------------
+- module: jolokia
+  metricsets: ["jmx"]
+  enabled: true
+  period: 10s
+  hosts: ["192.168.1.23:8661", "localhost:8661"]
+  namespace: "metrics"
+  path: "/jolokia/?ignoreErrors=true&canonicalNaming=false"
+  jmx.mappings:
+    - mbean: 'java.lang:type=ClassLoading'
+      attributes:
+        - attr: LoadedClassCount
+          field: loadedclasscount	
+        - attr: UnloadedClassCount
+          field: unloadedclasscount
+        - attr: TotalLoadedClassCount
+          field: totalloadedclassCount
+    - mbean: 'java.lang:type=GarbageCollector,name=*'
+      attributes:
+        - attr: Name
+          field: gcname 
+        - attr: CollectionCount
+          field: collectioncount 
+        - attr: CollectionTime
+          field: collectiontime 
+        - attr: LastGcInfo
+          field: lastgcinfo
+        - attr: MemoryPoolNames
+          field: memorypoolnames
+    - mbean: 'java.lang:type=Memory'
+      attributes:
+        - attr: HeapMemoryUsage
+          field: heapmemoryusage
+        - attr: NonHeapMemoryUsage
+          field: nonheapmemoryusage
+    - mbean: 'java.lang:type=MemoryPool,name=*'
+      attributes:
+        - attr: Name
+          field: poolname
+        - attr: Usage
+          field: usage
+        - attr: PeakUsage
+          field: peakusage
+        - attr: MemoryManagerNames
+          field: memorymanagernames
+        - attr: UsageThreshold
+          field: usagethreshold
+        - attr: UsageThresholdExceeded
+          field: usagethresholdexceeded
+        - attr: UsageThresholdCount
+          field: usagethresholdcount
+        - attr: UsageThresholdSupported
+          field: usagethresholdsupported
+        - attr: CollectionUsage
+          field: collectionusage
+        - attr: CollectionUsageThreshold
+          field: collectionusagethreshold
+        - attr: CollectionUsageThresholdExceeded
+          field: collectionusagethresholdexceeded
+        - attr: CollectionUsageThresholdCount
+          field: collectionusagethresholdcount
+        - attr: CollectionUsageThresholdSupported
+          field: collectionusagethresholdsupported
+    - mbean: 'java.lang:type=OperatingSystem'
+      attributes:
+        - attr: Name
+          field: name
+        - attr: OpenFileDescriptorCount
+          field: openfiledescriptorcount
+        - attr: MaxFileDescriptorCount
+          field: maxfiledescriptorcount
+        - attr: CommittedVirtualMemorySize
+          field: committedvirtualmemorysize
+        - attr: TotalSwapSpaceSize
+          field: totalswapspacesize
+        - attr: FreeSwapSpaceSize
+          field: freeswapspacesize
+        - attr: ProcessCpuLoad
+          field: processcpuload
+        - attr: SystemCpuLoad
+          field: systemcpuload
+        - attr: SystemLoadAverage
+          field: systemloadaverage
+        - attr: AvailableProcessors
+          field: availableprocessors
+        - attr: Arch
+          field: arch
+    - mbean: 'java.lang:type=Runtime'
+      attributes:
+        - attr: Name
+          field: name
+        - attr: bootclasspathsupported
+          field: bootclasspathsupported
+        - attr: VmName
+          field: vmname
+        - attr: VmVendor
+          field: vmvendor
+        - attr: VmVersion
+          field: vmversion
+        - attr: LibraryPath
+          field: librarypath
+        - attr: BootClassPath
+          field: bootclasspath
+        - attr: Uptime
+          field: uptime
+        - attr: StartTime
+          field: starttime
+        - attr: SpecName
+          field: specname
+        - attr: SpecVendor
+          field: specvendor
+        - attr: SpecVersion
+          field: specversion
+        - attr: ManagementSpecVersion
+          field: managementspecversion
+        - attr: InputArguments
+          field: inputarguments
+        - attr: SystemProperties
+          field: systemproperties
+        - attr: ClassPath
+          field: classpath
+    - mbean: 'java.lang:type=Threading'
+      attributes:
+        - attr: ThreadAllocatedMemorySupported
+          field: threadallocatedmemorysupported
+        - attr: ThreadAllocatedMemoryEnabled
+          field: threadallocatedmemoryenabled
+        - attr: ThreadContentionMonitoringSupported
+          field: threadcontentionmonitoringsupported
+        - attr: CurrentThreadCpuTimeSupported
+          field: currentthreadcputimesupported
+        - attr: ObjectMonitorUsageSupported
+          field: objectmonitorusagesupported
+        - attr: SynchronizerUsageSupported
+          field: synchronizerusagesupported
+        - attr: ThreadContentionMonitoringEnabled
+          field: threadcontentionmonitoringenabled
+        - attr: ThreadCpuTimeEnabled
+          field: threadcputimeenabled
+        - attr: PeakThreadCount
+          field: peakthreadcount
+        - attr: DaemonThreadCount
+          field: daemonthreadcount
+        - attr: ThreadCount
+          field: threadcount
+        - attr: TotalStartedThreadCount
+          field: totalstartedthreadcount
+        - attr: AllThreadIds
+          field: allthreadIds
+        - attr: CurrentThreadCpuTime
+          field: currentthreadcputime
+        - attr: CurrentThreadUserTime
+          field: currentthreadusertime
+        - attr: ThreadCpuTimeSupported
+          field: threadcputimesupported
+    #- mbean: 'java.lang:type=GarbageCollector,name=ConcurrentMarkSweep'
+    #  attributes:
+    #    - attr: CollectionTime
+    #      field: gc.cms_collection_time
+    #    - attr: CollectionCount
+    #      field: gc.cms_collection_count
+  jmx.application:
+  jmx.instance:
+#============================== Kibana =====================================
+# Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
+# This requires a Kibana endpoint configuration.
+setup.kibana:
+  # Kibana Host
+  # change the host address as per your kibana host
+  #  host: "localhost:5601"
+  host: "http://192.168.1.28:5601"
+  username: username
+  password: password
+
+setup.dashboards:
+  enabled: true
+  #directory: /home/elastic/metricbeat-6.5.4-linux-x86_64/custom_dashboard
+  always_kibana: true
+  beat: ""
+  index: "metrics-*"
+  retry.enabled: true
+  retry.interval: 5s
+  retry.maximum: 5
+
+
+
+
+  
+  
+  
+
+
