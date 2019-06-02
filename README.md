@@ -14,7 +14,7 @@ The JConsole graphical user interface is a monitoring tool that complies to the 
 https://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html
 
 #### How to activate JMX on a JVM for access with jconsole?
-Note: No settings required on ubuntu, since jconsole can work with default settings. But the below settings may be needed for othr OS variants. 
+Note: No settings required on ubuntu, since jconsole can work with default settings. But the below settings may be needed for other OS variants. 
 
 java -Dcom.sun.management.jmxremote \ -Dcom.sun.management.jmxremote.port=9010 \ -Dcom.sun.management.jmxremote.local.only=false \ -Dcom.sun.management.jmxremote.authenticate=false \ -Dcom.sun.management.jmxremote.ssl=false \ -jar Notepad.jar
 
