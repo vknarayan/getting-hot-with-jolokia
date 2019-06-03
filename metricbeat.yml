@@ -1,6 +1,7 @@
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
-  # Array of hosts to connect to.
+  # Array of hosts to connect to
+  # change these as per your elasticsearch host IP
   hosts: ["192.168.1.28:9200", "192.168.1.29:9200", "192.168.1.30:9200"]
   index: "metrics-%{[beat.version]}-%{+yyyy.MM.dd}"
   # Optional protocol and basic auth credentials.
@@ -184,6 +185,9 @@ setup.kibana:
 
 setup.dashboards:
   enabled: true
+  #directory: The directory that contains the dashboards to load. The default is the kibana folder in the metricbeat home path
+  #You can copy custom dashboard to the default path so that it gets loaded at startup
+  # If it is in a different folder you can set the path as shown below
   #directory: /home/elastic/metricbeat-6.5.4-linux-x86_64/custom_dashboard
   always_kibana: true
   beat: ""
